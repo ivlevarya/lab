@@ -1,11 +1,18 @@
+/* !
+\file
+\brief Файл с описанием всех методов класса Game.
+*/
+
 #include "Header.h"
-#include <cstdlib> // Для функций rand()
+#include <cstdlib> 
 #include <iostream>
 #include <iomanip>
 
 using namespace std;
 
-
+/*!
+Конструктор класса Game, который создает матрицу заполненную числами в правильном порядке.
+*/
 Game::Game(): matrix{} {
 	int count = 1;
 	for (int i = 0; i < 4; i++) {
@@ -19,32 +26,26 @@ Game::Game(): matrix{} {
 			}
 		}
 	}
-	
+	empty_point_i = 3;
+	empty_point_j = 3;
 }
-
+/// Деструктор для очистки ресурсов
 Game::~Game() {}
-
+/*!
+Данный метод отвечает за получение значения клетки ([]).
+\param[in] i Номер строки.
+\param[in] j Номер столбца.
+\return Целое число соответствующего данному номеру строки и столбца.
+*/
 int Game::GetNum(int i, int j) {
 	return matrix[i][j];
 }
-
-bool Game::Check() {
-	int count = 1;
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			if (i == 3 && j == 3) {
-				return true; 
-			}
-			if (matrix[i][j] == count) {
-				count++;
-				continue;
-			}
-			else { return 0; }
-		}
-	}
-	return 1;
-}
-
+/*!
+Данный метод отвечает за перестановку клеток.
+\param[in] i Номер строки.
+\param[in] j Номер столбца.
+\return Возвращает булевое значение в зависимости от того удалось ли выполнить операцию.
+*/
 bool Game::Change(int i, int j) {
 	if (i > -1 && j < 4) {
 		if (abs(i - empty_point_i) == 1 || abs(j - empty_point_j) == 1) {
@@ -59,7 +60,7 @@ bool Game::Change(int i, int j) {
 	}
 	else { return 0; }
 }
-
+/// Выводит матрицу игрового поля на экран (интерфейс)
 void Game::GetMatrix() {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -72,7 +73,11 @@ void Game::GetMatrix() {
 		cout << endl << "----------------" << endl;
 	}
 }
-
+/*!
+Данный метод отвечает за случайное расположение номеров перед началом игры. Он в рандомном порядке (в соответствии с правилами игры) 
+переставляет пустую клетку, что гарантирует решаемость головоломки.
+\param[in] iterations Количество перестановок.
+*/
 void Game::Shaker(int iterations) {
 	int point_i = 3;
 	int point_j = 3;
@@ -99,6 +104,11 @@ void Game::Shaker(int iterations) {
 	empty_point_i = point_i;
 	empty_point_j = point_j;
 }
+/*!
+Оператор проверки равенства двух игровых состояний.
+\param[in] b Ссылка на объект класса с которым мы хотим провести сравнение.
+\return Возвращает булевое значение в зависимости от того равны ли два объекта или нет.
+*/
 bool Game::operator == (const Game& b) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -110,6 +120,11 @@ bool Game::operator == (const Game& b) {
 	}
 	return true;
 }
+/*!
+Оператор проверки неравенства двух игровых состояний.
+\param[in] b Ссылка на объект класса с которым мы хотим провести сравнение.
+\return Возвращает булевое значение в зависимости от того неравны ли два объекта или нет.
+*/
 bool Game::operator != (const Game& b) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
