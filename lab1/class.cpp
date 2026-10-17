@@ -1,60 +1,25 @@
 #include "Header.h"
 #include <cstdlib> // Для функций rand()
 #include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 
-
-Game::Game(int num_mode): matrix{} {
-	switch (num_mode) {
-	case 1: {
-		int count = 1;
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (i == 3 && j == 3) {
-					matrix[i][j] = 0;
-				}
-				else {
-					matrix[i][j] = count;
+Game::Game(): matrix{} {
+	int count = 1;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (i == 3 && j == 3) {
+				matrix[i][j] = 0;
+			}
+			else {
+				matrix[i][j] = count;
 					count++;
-				}
 			}
 		}
-		Shaker(matrix, 30);
-		break;
 	}
-	case 2: {
-		int count = 1;
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (i == 3 && j == 3) {
-					matrix[i][j] = 0;
-				}
-				else {
-					matrix[i][j] = count;
-					count++;
-				}
-			}
-		}
-		Shaker(matrix, 100);
-		break;
-	}
-	case 3: {
-		int count = 1;
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (i == 3 && j == 3) {
-					matrix[i][j] = 0;
-				}
-				else {
-					matrix[i][j] = count;
-					count++;
-				}
-			}
-		}
-		Shaker(matrix, 200);
-		break;
-	}
-	}
+	
 }
 
 Game::~Game() {}
@@ -80,7 +45,7 @@ bool Game::Check() {
 	return 1;
 }
 
-bool Game::Change(int i, int j, int(&matrix)[4][4]) {
+bool Game::Change(int i, int j) {
 	if (i > -1 && j < 4) {
 		if (abs(i - empty_point_i) == 1 || abs(j - empty_point_j) == 1) {
 			int temp = matrix[i][j];
@@ -98,13 +63,17 @@ bool Game::Change(int i, int j, int(&matrix)[4][4]) {
 void Game::GetMatrix() {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
-			cout << matrix[i][j] << ' ';
+			if (matrix[i][j] == 0) {
+				cout << setw(3) << "*" << "|";
+				continue;
+			}
+			cout << setw(3) << matrix[i][j] << "|";
 		}
-		cout << endl;
+		cout << endl << "----------------" << endl;
 	}
 }
 
-void Game::Shaker(int(&matrix)[4][4], int iterations) {
+void Game::Shaker(int iterations) {
 	int point_i = 3;
 	int point_j = 3;
 	for (int i = 0; i < iterations; i++) {
@@ -129,4 +98,26 @@ void Game::Shaker(int(&matrix)[4][4], int iterations) {
 	}
 	empty_point_i = point_i;
 	empty_point_j = point_j;
+}
+bool Game::operator == (const Game& b) {
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (this->matrix[i][j] == b.matrix[i][j]) {
+				continue;
+			}
+			else { return false; }
+		}
+	}
+	return true;
+}
+bool Game::operator != (const Game& b) {
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (this->matrix[i][j] == b.matrix[i][j]) {
+				continue;
+			}
+			else { return true; }
+		}
+	}
+	return false;
 }
