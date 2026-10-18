@@ -48,7 +48,7 @@ int Game::GetNum(int i, int j) {
 */
 bool Game::Change(int i, int j) {
 	if (i > -1 && j < 4) {
-		if (abs(i - empty_point_i) == 1 || abs(j - empty_point_j) == 1) {
+		if ((abs(i - empty_point_i) == 1 && empty_point_j - j == 0) || (abs(j - empty_point_j) == 1 && empty_point_i - i == 0)) {
 			int temp = matrix[i][j];
 			matrix[i][j] = matrix[empty_point_i][empty_point_j];
 			matrix[empty_point_i][empty_point_j] = temp;
