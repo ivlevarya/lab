@@ -368,4 +368,4 @@ FodyWeavers.xsd
 lab1/*.vcxproj
 lab1/*.vcxproj.filters
 
-doc/
+docs/

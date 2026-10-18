@@ -27,8 +27,11 @@ public:
 	/// Equality operator to compare two game states.
 	bool operator != (const Game& b);
 private:
+	/// Row index of the empty cell (0) on the board.
 	int empty_point_i;
+	/// Column index of the empty cell (0) on the board.
 	int empty_point_j;
+	/// 4x4 matrix representing the puzzle grid.
 	int matrix[4][4];
 };
 
