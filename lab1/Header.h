@@ -1,30 +1,30 @@
-/* !
+/*!
 \file
-\brief Заголовочный файл с объявлением класса Game.
+\brief Header file containing the Game class declaration.
 
-Данный файл содержит объявление класса Game, который объединяет в себе
-игровую логику головоломки «Пятнашки» и методы для работы с интерфейсом.
+This file contains the declaration of the Game class, which combines
+the game logic of the "15-puzzle" and interface methods.
 */
 
 #pragma once
 
 class Game {
 public:
-	/// Конструктор, создающий начальное состояние игры.
+	/// Constructor that creates the initial state of the game.
 	Game();
-	/// Деструктор для очистки ресурсов.
+	/// Destructor for resource cleanup.
 	~Game();
-	/// Возвращает значение элемента матрицы по индексам i и j.
+	/// Returns the element value by row index i and column index j.
 	int GetNum(int i, int j);
-	/// Перемещает фишку на пустую позицию, если это возможно.
+	/// Moves a tile to the empty position if the move is valid.
 	bool Change(int i, int j);
-	/// Выводит матрицу игрового поля на экран (интерфейс).
+	/// Prints the game board matrix to the screen (UI).
 	void GetMatrix();
-	/// Перемешивает игровое поле заданное количество раз.
+	/// Shuffles the game board a specified number of times.
 	void Shaker(int iterations);
-	/// Оператор проверки равенства двух игровых состояний.
+	/// Equality operator to compare two game states.
 	bool operator == (const Game& b);
-	/// Оператор проверки неравенства двух игровых состояний.
+	/// Equality operator to compare two game states.
 	bool operator != (const Game& b);
 private:
 	int empty_point_i;

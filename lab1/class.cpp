@@ -1,6 +1,6 @@
-/* !
+/*!
 \file
-\brief Файл с описанием всех методов класса Game.
+\brief File containing the implementation of all Game class methods.
 */
 
 #include "Header.h"
@@ -11,7 +11,7 @@
 using namespace std;
 
 /*!
-Конструктор класса Game, который создает матрицу заполненную числами в правильном порядке.
+Constructor of the Game class that creates a matrix filled with numbers in the correct order.
 */
 Game::Game(): matrix{} {
 	int count = 1;
@@ -29,25 +29,25 @@ Game::Game(): matrix{} {
 	empty_point_i = 3;
 	empty_point_j = 3;
 }
-/// Деструктор для очистки ресурсов
+/// Destructor for resource cleanup.
 Game::~Game() {}
 /*!
-Данный метод отвечает за получение значения клетки ([]).
-\param[in] i Номер строки.
-\param[in] j Номер столбца.
-\return Целое число соответствующего данному номеру строки и столбца.
+This method returns the value of a specific tile.
+\param[in] i Row index.
+\param[in] j Column index.
+\return Integer value corresponding to the given row and column.
 */
 int Game::GetNum(int i, int j) {
 	return matrix[i][j];
 }
 /*!
-Данный метод отвечает за перестановку клеток.
-\param[in] i Номер строки.
-\param[in] j Номер столбца.
-\return Возвращает булевое значение в зависимости от того удалось ли выполнить операцию.
+This method handles moving/swapping the tiles.
+\param[in] i Row index of the target tile.
+\param[in] j Column index of the target tile.
+\return Returns a boolean value indicating whether the move was successful.
 */
 bool Game::Change(int i, int j) {
-	if (i > -1 && j < 4) {
+	if (i >= 0 && i < 4 && j >= 0 && j < 4) {
 		if ((abs(i - empty_point_i) == 1 && empty_point_j - j == 0) || (abs(j - empty_point_j) == 1 && empty_point_i - i == 0)) {
 			int temp = matrix[i][j];
 			matrix[i][j] = matrix[empty_point_i][empty_point_j];
@@ -60,7 +60,7 @@ bool Game::Change(int i, int j) {
 	}
 	else { return 0; }
 }
-/// Выводит матрицу игрового поля на экран (интерфейс)
+/// Prints the game board matrix to the screen (UI).
 void Game::GetMatrix() {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -74,9 +74,9 @@ void Game::GetMatrix() {
 	}
 }
 /*!
-Данный метод отвечает за случайное расположение номеров перед началом игры. Он в рандомном порядке (в соответствии с правилами игры) 
-переставляет пустую клетку, что гарантирует решаемость головоломки.
-\param[in] iterations Количество перестановок.
+This method randomly shuffles the numbers before starting the game.
+It moves the empty cell following the rules of the game, which guarantees that the puzzle remains solvable.
+\param[in] iterations Number of shuffles/moves.
 */
 void Game::Shaker(int iterations) {
 	int point_i = 3;
@@ -105,9 +105,9 @@ void Game::Shaker(int iterations) {
 	empty_point_j = point_j;
 }
 /*!
-Оператор проверки равенства двух игровых состояний.
-\param[in] b Ссылка на объект класса с которым мы хотим провести сравнение.
-\return Возвращает булевое значение в зависимости от того равны ли два объекта или нет.
+Equality operator to compare two game states.
+\param[in] b Reference to the Game object to compare with.
+\return Returns true if both objects are identical, otherwise false.
 */
 bool Game::operator == (const Game& b) {
 	for (int i = 0; i < 4; i++) {
@@ -121,17 +121,17 @@ bool Game::operator == (const Game& b) {
 	return true;
 }
 /*!
-Оператор проверки неравенства двух игровых состояний.
-\param[in] b Ссылка на объект класса с которым мы хотим провести сравнение.
-\return Возвращает булевое значение в зависимости от того неравны ли два объекта или нет.
+Inequality operator to compare two game states.
+\param[in] b Reference to the Game object to compare with.
+\return Returns true if objects are different, otherwise false.
 */
 bool Game::operator != (const Game& b) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
-			if (this->matrix[i][j] == b.matrix[i][j]) {
-				continue;
+			if (this->matrix[i][j] != b.matrix[i][j]) {
+				return true;
 			}
-			else { return true; }
+			else { continue; }
 		}
 	}
 	return false;

@@ -1,9 +1,9 @@
-/* !
+/*!
 \file
-\brief Файл с реализацией пользовательского интерфейса.
+\brief File containing the user interface implementation.
 
-Данный файл содержит логику консольного меню игры «Пятнашки»,
-обработку ввода пользователя и управление игровым процессом.
+This file contains the console menu logic for the "15-puzzle" game,
+user input handling, and gameplay management.
 */
 #include <iostream>
 #include "Header.h"
@@ -11,15 +11,15 @@
 
 using namespace std;
 /*!
-*\brief Главная функция программы, управляющая игровым циклом.
-* \details Перед началом в консоль выводятся правила игры.Затем пользователь может выбрать уровень
-* сложности(легкий, средний, сложный).Если пользователь ошибся при выборе уровня,
-* автоматически устанавливается средний уровень.
-*
-* В основном цикле в консоль выводится меню игры, где пользователь выбирает действие :
-*-Передвинуть клетку(программа запрашивает строку и столбец; если ход невозможен — действие игнорируется).
-* -Получить значение клетки по её координатам.
-* -Выйти из игры.
+\brief Main function of the program that controls the game loop.
+\details Before starting, the rules of the game are printed to the console.
+Then the user can select the difficulty level (easy, medium, hard).
+If the user enters an invalid choice, the medium level is set automatically.
+
+In the main loop, the game menu is displayed where the user chooses an action:
+- Move a tile (the program requests a row and a column; if the move is invalid, the action is ignored).
+- Get a tile value by its coordinates.
+- Exit the game.
 */
 
 int main() {
