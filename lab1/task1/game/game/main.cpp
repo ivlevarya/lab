@@ -9,6 +9,7 @@ user input handling, and gameplay management.
 #include "Header.h"
 #include <ctime>
 
+
 using namespace std;
 /*!
 \brief Main function of the program that controls the game loop.
@@ -21,6 +22,7 @@ In the main loop, the game menu is displayed where the user chooses an action:
 - Get a tile value by its coordinates.
 - Exit the game.
 */
+
 
 int main() {
 	srand(time(0));
@@ -60,12 +62,11 @@ int main() {
 	int n = 0;
 	while (cont) {
 		cout << endl;
-		currentGrid.GetMatrix();
+		drawBoard(currentGrid);
 		cout << endl;
 		cout << "MENU:" << endl
 			<< "1. Move tiles" << endl
-			<< "2. Get tile value" << endl
-			<< "3. Exit" << endl;
+			<< "2. Exit" << endl;
 		cin >> n;
 		if (n < 1 || n > 3) {
 			continue;
@@ -88,19 +89,6 @@ int main() {
 			break;
 		}
 		case(2): {
-			int i;
-			int j;
-			cout << "Type the number of the row: ";
-			cin >> i;
-			cout << "Type the number of the collumn: ";
-			cin >> j;
-			if (i - 1 < 0 || i - 1 > 3 || j - 1 < 0 || j - 1 > 3) {
-				continue;
-			}
-			cout << currentGrid.GetNum(i - 1, j - 1);
-			break;
-		}
-		case(3): {
 			cout << "END." << endl;
 			cont = false;
 			break;

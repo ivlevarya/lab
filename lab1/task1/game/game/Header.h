@@ -1,6 +1,6 @@
 /*!
 \file
-\brief Header file containing the Game class declaration.
+\brief Header file containing the Game class declaration and declarations of other functions.
 
 This file contains the declaration of the Game class, which combines
 the game logic of the "15-puzzle" and interface methods.
@@ -18,13 +18,9 @@ public:
 	int GetNum(int i, int j);
 	/// Moves a tile to the empty position if the move is valid.
 	bool Change(int i, int j);
-	/// Prints the game board matrix to the screen (UI).
-	void GetMatrix();
 	/// Shuffles the game board a specified number of times.
 	void Shaker(int iterations);
-	/// Equality operator to compare two game states.
 	bool operator == (const Game& b);
-	/// Equality operator to compare two game states.
 	bool operator != (const Game& b);
 private:
 	/// Row index of the empty cell (0) on the board.
@@ -34,6 +30,8 @@ private:
 	/// 4x4 matrix representing the puzzle grid.
 	int matrix[4][4];
 };
+
+void drawBoard(Game& game);
 
 
 

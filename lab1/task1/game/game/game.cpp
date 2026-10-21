@@ -1,12 +1,13 @@
 /*!
 \file
-\brief File containing the implementation of all Game class methods.
+\brief File containing the implementation of all Game class methods and other functions.
 */
 
 #include "Header.h"
 #include <cstdlib> 
 #include <iostream>
 #include <iomanip>
+
 
 using namespace std;
 
@@ -59,19 +60,6 @@ bool Game::Change(int i, int j) {
 		else { return 0; }
 	}
 	else { return 0; }
-}
-/// Prints the game board matrix to the screen (UI).
-void Game::GetMatrix() {
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			if (matrix[i][j] == 0) {
-				cout << setw(3) << "*" << "|";
-				continue;
-			}
-			cout << setw(3) << matrix[i][j] << "|";
-		}
-		cout << endl << "----------------" << endl;
-	}
 }
 /*!
 This method randomly shuffles the numbers before starting the game.
@@ -135,4 +123,26 @@ bool Game::operator != (const Game& b) {
 		}
 	}
 	return false;
+}
+/*!
+ \brief Renders the 4x4 game board of the Fifteen Puzzle to the console.
+ 
+ This function iterates through the 4x4 grid retrieved from the game state.
+ Each tile is formatted with a specific width for clean visual alignment.
+ The empty tile (represented by the value 0) is rendered as an asterisk (*).
+ 
+ /param[in] game A reference to the Game object used to fetch current tile values via GetNum().
+ */
+void drawBoard(Game& game) {
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			int value = game.GetNum(i, j);
+			if (value == 0) {
+				cout << setw(3) << "*" << "|";
+				continue;
+			}
+			cout << setw(3) << value << "|";
+		}
+		cout << endl << "----------------" << endl;
+	}
 }
