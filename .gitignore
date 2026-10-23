@@ -365,5 +365,8 @@ FodyWeavers.xsd
 
 *.vcxproj
 *.vcxproj.filters
+game/game.vcxproj
+game/game.vcxproj.filters
+
 
 docs/
