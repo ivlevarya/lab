@@ -368,6 +368,6 @@ FodyWeavers.xsd
 game/game.vcxproj
 game/game.vcxproj.filters
 
-
+catch.hpp
 docs/
 build/

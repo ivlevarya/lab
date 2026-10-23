@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#include <catch.hpp>
+#include "catch.hpp"
 #include "Header.h"
 
 TEST_CASE("Moves a tile to the empty position if the move is valid.") {
