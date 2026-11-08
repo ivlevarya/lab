@@ -1,9 +1,6 @@
 #include "Command.h"
 
-Command::Command(char symbol, int nextCommand, int markedCommand)
-    : symbol(symbol),
-      nextCommand(nextCommand),
-      markedCommand(markedCommand)
+Command::Command(char symbol, int nextCommand, int markedCommand) : symbol(symbol), nextCommand(nextCommand), markedCommand(markedCommand)
 {
     actions['<'] = &Command::moveLeft;
     actions['>'] = &Command::moveRight;
@@ -28,8 +25,7 @@ void Command::execute(Tape& tape, int& currentCommand, bool& stopped) const
     }
 
     // Проверка положения каретки
-    if (tape.carriage < 0 ||
-        static_cast<std::size_t>(tape.carriage) >= tape.cells.size()) {
+    if (tape.carriage < 0 || tape.carriage >= tape.cells.size()) {
         stopped = true;
         return;
     }
@@ -58,8 +54,7 @@ void Command::moveRight(Tape& tape,
                         int& currentCommand,
                         bool&) const
 {
-    if (static_cast<std::size_t>(tape.carriage) ==
-        tape.cells.size() - 1) {
+    if (tape.carriage == tape.cells.size() - 1) {
         tape.cells.push_back(0);
     }
 

@@ -51,18 +51,13 @@ void PostMachine::executeStep()
     }
 
     // Номера команд в программе начинаются с 1
-    if (currentCommand < 1 ||
-        static_cast<std::size_t>(currentCommand) > program.size()) {
+    if (currentCommand < 1 || currentCommand > program.size()) {
         stopped = true;
         return;
     }
 
     // Индексы элементов вектора начинаются с 0
-    program[currentCommand - 1].execute(
-        tape,
-        currentCommand,
-        stopped
-    );
+    program[currentCommand - 1].execute(tape, currentCommand, stopped);
 }
 
 // Остановить машину
@@ -111,12 +106,12 @@ bool PostMachine::load(std::ifstream& file, PostMachine& pm) {
     getline(file, car);
     ss.str(car);
     ss.clear();
-    int carriage;
+    int carriage = 0;
     if (car.empty() || car.find_first_not_of("\t\r") == std::string::npos) {
         carriage = 1;
     }
 
-    if (!ss >> carriage) { return false; }
+    if (!(ss >> carriage)) { return false; }
 
     pm.setTape(cells, carriage - 1);
 
@@ -160,8 +155,8 @@ bool PostMachine::load(std::ifstream& file, PostMachine& pm) {
         }
         // Создаём команду из прочитанных значений
         comands.push_back(Command(symbol, nextCommand, markedCommand));
-        pm.setProgram(comands);
     }
+    pm.setProgram(comands);
     return true;
 }
 
@@ -199,15 +194,14 @@ void PostMachine::printProgram() const
 
 bool PostMachine::deleteCommand(int number)
 {
-    if (number < 1 ||
-        static_cast<std::size_t>(number) > program.size()) {
+    if (number < 1 || number > program.size()) {
         return false;
     }
 
-    std::size_t index = static_cast<std::size_t>(number - 1);
+    int index = number - 1;
 
     // Проверяем, ссылаются ли другие правила на удаляемое
-    for (std::size_t i = 0; i < program.size(); ++i) {
+    for (int i = 0; i < program.size(); ++i) {
         if (i == index) {
             continue;
         }

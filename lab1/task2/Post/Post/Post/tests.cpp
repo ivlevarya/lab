@@ -269,7 +269,7 @@ TEST_CASE("Load valid programs and blank lines") {
 
     // Characterizes the existing bug in !ss >> carriage.
     // The intended carriage index for input "2" would be 1.
-    REQUIRE(pm.getCarriage() == -1);
+    REQUIRE(pm.getCarriage() == 1);
 
     REQUIRE(pm.isStopped());
     REQUIRE(listing(pm) == "1: V-2\n2: !\n");
@@ -313,9 +313,6 @@ TEST_CASE("Loader current behavior for missing or invalid carriage") {
     std::ifstream file(fixture.path);
     PostMachine pm;
 
-    REQUIRE(pm.load(file,
-        pm));
-    REQUIRE(pm.getCarriage() ==
-        (std::string(carriage) == "bad" ? -1 : 0));
+    REQUIRE_FALSE(pm.load(file, pm));
 }
 

@@ -1,3 +1,11 @@
+/**
+ * @file main.cpp
+ * @brief Console interface for the Post machine simulator.
+ *
+ * Supports loading programs, editing the tape and instructions,
+ * step-by-step execution, continuous execution, and logging.
+ */
+
 #include "PostMachine.h"
 
 #include <fstream>
@@ -5,13 +13,27 @@
 #include <sstream>
 #include <string>
 #include <vector>
+ /**
+  * @brief Starts the interactive Post machine simulator.
+  *
+  * @param argc Number of command-line arguments.
+  * @param argv Argument array. The application expects an input file path
+  * and accepts the optional "-log" flag.
+  * @return 0 on normal completion; 1 on a command-line or initial loading error.
+  *
+  * @par Usage
+  * @code
+  * Post.exe example.txt
+  * Post.exe example.txt -log
+  * @endcode
+  */
 
 int main(int argc, char* argv[])
 {
     std::string fileName;
     bool log = false;
 
-    // Читаем путь к файлу и необязательный флаг -log
+    
     for (int i = 1; i < argc; ++i) {
         std::string argument = argv[i];
 
@@ -35,14 +57,14 @@ int main(int argc, char* argv[])
     std::ifstream file(fileName);
 
     if (!file.is_open()) {
-        std::cerr << "Cannot open the file: " << fileName << '\n';
+        std::cout << "Cannot open the file: " << fileName << '\n';
         return 1;
     }
 
     PostMachine machine;
 
     if (!machine.load(file, machine)) {
-        std::cerr << "File upload failed.\n";
+        std::cout << "File upload failed.\n";
         return 1;
     }
 
@@ -52,7 +74,7 @@ int main(int argc, char* argv[])
     bool exit = false;
 
     while (!exit) {
-        // Показываем состояние перед выбором действия
+        
         const std::vector<int>& cells = machine.getCells();
         int carriage = machine.getCarriage();
 
@@ -230,16 +252,6 @@ int main(int argc, char* argv[])
                 std::cout << "Wrong carriage position.\n";
                 break;
             }
-
-            positionInput >> std::ws;
-
-            if (!positionInput.eof() ||
-                position < 1 ||
-                static_cast<std::size_t>(position) > newCells.size()) {
-                std::cout << "The postion goes beyond tape boundaries.\n";
-                break;
-            }
-
             machine.setTape(newCells, position - 1);
             machine.stop();
             executionPrepared = false;
@@ -250,8 +262,7 @@ int main(int argc, char* argv[])
 
         case 5:
         case 6: {
-            // Подготовка нужна перед первым шагом после загрузки
-            // или редактирования программы.
+           
             if (!executionPrepared) {
                 machine.prepareExecution();
                 executionPrepared = true;
@@ -267,15 +278,14 @@ int main(int argc, char* argv[])
             do {
                 machine.executeStep();
 
-                // При -log выводим состояние после каждого правила
                 if (log) {
                     const std::vector<int>& state = machine.getCells();
                     int currentPosition = machine.getCarriage();
 
                     std::cout << "\nAfter comand execution:\nTape: ";
 
-                    for (std::size_t i = 0; i < state.size(); ++i) {
-                        if (static_cast<int>(i) == currentPosition) {
+                    for (int i = 0; i < state.size(); ++i) {
+                        if (i == currentPosition) {
                             std::cout << '[' << state[i] << ']';
                         }
                         else {
@@ -286,12 +296,10 @@ int main(int argc, char* argv[])
                     std::cout
                         << "\nCarriage postion: " << currentPosition + 1
                         << "\nMachine was stopped: "
-                        << (machine.isStopped() ? "да" : "нет")
+                        << (machine.isStopped() ? "Yes" : "No")
                         << '\n';
                 }
 
-                // Для действия 5 выполняется только один шаг.
-                // Для действия 6 цикл продолжается до остановки.
             } while (choice == 6 && !machine.isStopped());
 
             if (machine.isStopped()) {
@@ -307,7 +315,7 @@ int main(int argc, char* argv[])
 
             std::cout
                 << "Execution is prepared from the first comand.\n"
-                << "Тhe current content of the tape has been saved.\n";
+                << "The current content of the tape has been saved.\n";
             break;
         }
 
@@ -326,8 +334,6 @@ int main(int argc, char* argv[])
                 break;
             }
 
-            // Загружаем во временный объект, чтобы при ошибке
-            // сохранить прежнюю машину.
             PostMachine newMachine;
 
             if (!newMachine.load(newFile, newMachine)) {
