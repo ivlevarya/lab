@@ -84,10 +84,10 @@ jobs:
             --filter "${{ matrix.sources }}/" \
             --exclude '.*/tests?\.cpp$' \
             --exclude '.*/catch\.hpp$' \
+            --exclude '.*/main\.cpp$' \
             --txt \
             --html-details coverage/index.html \
             --fail-under-line 90
-            --exclude '.*/main\.cpp$' \
 
       - name: Upload coverage report
         if: always()
