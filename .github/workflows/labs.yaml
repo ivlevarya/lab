@@ -34,3 +34,64 @@ jobs:
 
       - name: Run unit tests
         run: ctest --test-dir "${{ matrix.path }}/build" -C Debug --output-on-failure --no-tests=error
+  coverage:
+    name: Coverage ${{ matrix.project }}
+    needs: build-and-test
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: Game
+            path: lab1/task1/game
+            sources: game
+
+          - project: Post
+            path: lab1/task2/Post/Post
+            sources: Post
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.path }}
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v6
+
+      - name: Install coverage tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcovr
+
+      - name: Configure coverage build
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_FLAGS="--coverage -O0 -g"
+
+      - name: Build application and tests
+        run: cmake --build build --parallel
+
+      - name: Run unit tests
+        run: ctest --test-dir build --output-on-failure --no-tests=error
+
+      - name: Generate report and check 90 percent
+        run: |
+          mkdir -p coverage
+          gcovr \
+            --root . \
+            --filter "${{ matrix.sources }}/" \
+            --exclude '.*/tests?\.cpp$' \
+            --exclude '.*/catch\.hpp$' \
+            --txt \
+            --html-details coverage/index.html \
+            --fail-under-line 90
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-${{ matrix.project }}
+          path: ${{ matrix.path }}/coverage/
+          if-no-files-found: warn
