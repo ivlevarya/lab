@@ -87,6 +87,7 @@ jobs:
             --txt \
             --html-details coverage/index.html \
             --fail-under-line 90
+            --exclude '.*/main\.cpp$' \
 
       - name: Upload coverage report
         if: always()

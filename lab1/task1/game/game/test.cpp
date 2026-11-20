@@ -1,6 +1,9 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Header.h"
+#include <iostream>
+#include <sstream>
+#include <string>
 
 TEST_CASE("Moves a tile to the empty position if the move is valid.") {
 	Game a;
@@ -116,4 +119,30 @@ TEST_CASE("Comparison detects equal and different boards") {
     REQUIRE(b.Change(3, 2));
     REQUIRE((a == b));
     REQUIRE_FALSE((a != b));
+}
+
+TEST_CASE("Draw board prints tiles and the empty cell") {
+    Game game;
+    Game original;
+
+    std::ostringstream output;
+
+    std::streambuf* oldBuffer = std::cout.rdbuf(output.rdbuf());
+
+    drawBoard(game);
+
+    std::cout.rdbuf(oldBuffer);
+
+    const std::string expected =
+        "  1|  2|  3|  4|\n"
+        "----------------\n"
+        "  5|  6|  7|  8|\n"
+        "----------------\n"
+        "  9| 10| 11| 12|\n"
+        "----------------\n"
+        " 13| 14| 15|  *|\n"
+        "----------------\n";
+
+    REQUIRE(output.str() == expected);
+    REQUIRE((game == original));
 }
