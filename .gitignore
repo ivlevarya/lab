@@ -367,8 +367,9 @@ FodyWeavers.xsd
 *.vcxproj.filters
 game/game.vcxproj
 game/game.vcxproj.filters
-Post.sln
 catch.hpp
 docs/
 build/
 example.txt
+*.sln
+*.slnx
