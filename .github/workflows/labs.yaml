@@ -96,3 +96,41 @@ jobs:
           name: coverage-${{ matrix.project }}
           path: ${{ matrix.path }}/coverage/
           if-no-files-found: warn
+  static-analysis:
+    name: Static analysis ${{ matrix.project }}
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: Game
+            path: lab1/task1/game
+            sources: game
+
+          - project: Post
+            path: lab1/task2/Post/Post
+            sources: Post
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.path }}
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v6
+
+      - name: Install Cppcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
+
+      - name: Analyze source code
+        run: >
+          cppcheck
+          --enable=warning,performance,portability
+          --std=c++14
+          --error-exitcode=1
+          -i "${{ matrix.sources }}/test.cpp"
+          -i "${{ matrix.sources }}/tests.cpp"
+          "${{ matrix.sources }}/"
