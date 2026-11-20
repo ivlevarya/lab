@@ -13,10 +13,3 @@ add_executable(PostTests Post/tests.cpp Post/Command.h Post/Command.cpp Post/Pos
 
 
 add_test(NAME RunAllTests COMMAND PostTests)
-
-add_custom_target(RunUnitTests
-    COMMAND ${CMAKE_CTEST_COMMAND}
-        -C $<CONFIG>
-        --output-on-failure
-    COMMENT "Running unit tests before building the application..."
-)

@@ -1,0 +1,36 @@
+name: Labs CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and test ${{ matrix.project }}
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: Game
+            path: lab1/task1/game
+
+          - project: Post
+            path: lab1/task2/Post/Post
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v6
+
+      - name: Configure CMake
+        run: cmake -S "${{ matrix.path }}" -B "${{ matrix.path }}/build"
+
+      - name: Build application and tests
+        run: cmake --build "${{ matrix.path }}/build" --config Debug --parallel
+
+      - name: Run unit tests
+        run: ctest --test-dir "${{ matrix.path }}/build" -C Debug --output-on-failure --no-tests=error
