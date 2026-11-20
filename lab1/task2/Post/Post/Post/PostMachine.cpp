@@ -6,12 +6,11 @@
 #include<iostream>
 
 
-// Задать начальное состояние ленты
 void PostMachine::setTape(const std::vector<int>& cells, int carriage)
 {
     tape.cells = cells;
 
-    // Пустой вектор заменяем одной пустой клеткой
+    
     if (tape.cells.empty()) {
         tape.cells.push_back(0);
     }
@@ -19,7 +18,7 @@ void PostMachine::setTape(const std::vector<int>& cells, int carriage)
     tape.carriage = carriage;
 }
 
-// Задать программу и подготовить машину к запуску
+
 void PostMachine::setProgram(const std::vector<Command>& commands)
 {
     program = commands;
@@ -27,7 +26,7 @@ void PostMachine::setProgram(const std::vector<Command>& commands)
     stopped = true;
 }
 
-// Запустить программу до команды остановки
+
 void PostMachine::start()
 {
     if (program.empty()) {
@@ -43,47 +42,42 @@ void PostMachine::start()
     }
 }
 
-// Выполнить одну команду
 void PostMachine::executeStep()
 {
     if (stopped) {
         return;
     }
 
-    // Номера команд в программе начинаются с 1
     if (currentCommand < 1 || currentCommand > program.size()) {
         stopped = true;
         return;
     }
 
-    // Индексы элементов вектора начинаются с 0
     program[currentCommand - 1].execute(tape, currentCommand, stopped);
 }
 
-// Остановить машину
+
 void PostMachine::stop()
 {
     stopped = true;
 }
 
-// Проверить, остановлена ли машина
+
 bool PostMachine::isStopped() const
 {
     return stopped;
 }
 
-// Получить позицию каретки
+
 int PostMachine::getCarriage() const
 {
     return tape.carriage;
 }
 
-// Получить содержимое ленты
 const std::vector<int>& PostMachine::getCells() const
 {
     return tape.cells;
 }
-
 bool PostMachine::load(std::ifstream& file, PostMachine& pm) {
     if (!file.is_open()) {
         return false;
@@ -150,10 +144,10 @@ bool PostMachine::load(std::ifstream& file, PostMachine& pm) {
             }
         }
         else {
-            // Неизвестный знак действия
+            
             return false;
         }
-        // Создаём команду из прочитанных значений
+        
         comands.push_back(Command(symbol, nextCommand, markedCommand));
     }
     pm.setProgram(comands);
@@ -200,7 +194,7 @@ bool PostMachine::deleteCommand(int number)
 
     int index = number - 1;
 
-    // Проверяем, ссылаются ли другие правила на удаляемое
+   
     for (int i = 0; i < program.size(); ++i) {
         if (i == index) {
             continue;
@@ -224,8 +218,6 @@ bool PostMachine::deleteCommand(int number)
 
     program.erase(program.begin() + index);
 
-    // Последующие правила получили номера на единицу меньше.
-    // Исправляем переходы к ним.
     for (Command& command : program) {
         if (command.symbol == '!') {
             continue;
