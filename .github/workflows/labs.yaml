@@ -134,3 +134,93 @@ jobs:
           -i "${{ matrix.sources }}/test.cpp"
           -i "${{ matrix.sources }}/tests.cpp"
           "${{ matrix.sources }}/"
+  release:
+    name: Build and publish release
+    needs: [build-and-test, coverage, static-analysis]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v6
+
+      - name: Configure Game release
+        run: >
+          cmake
+          -S lab1/task1/game
+          -B lab1/task1/game/build
+          -A x64
+          -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+
+      - name: Build Game release
+        run: cmake --build lab1/task1/game/build --config Release --parallel
+
+      - name: Test Game release
+        run: >
+          ctest
+          --test-dir lab1/task1/game/build
+          -C Release
+          --output-on-failure
+          --no-tests=error
+
+      - name: Configure Post release
+        run: >
+          cmake
+          -S lab1/task2/Post/Post
+          -B lab1/task2/Post/Post/build
+          -A x64
+          -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+
+      - name: Build Post release
+        run: cmake --build lab1/task2/Post/Post/build --config Release --parallel
+
+      - name: Test Post release
+        run: >
+          ctest
+          --test-dir lab1/task2/Post/Post/build
+          -C Release
+          --output-on-failure
+          --no-tests=error
+
+      - name: Create release archive
+        run: |
+          New-Item -ItemType Directory -Path release-files -Force | Out-Null
+
+          Copy-Item "lab1/task1/game/build/Release/Game.exe" "release-files/Game.exe"
+          Copy-Item "lab1/task2/Post/Post/build/Release/Post.exe" "release-files/Post.exe"
+          Copy-Item "lab1/task2/Post/Post/Post/example.txt" "release-files/example.txt"
+
+          @(
+            "Lab 1 - Windows x64"
+            ""
+            "Extract the archive before running."
+            "Open Command Prompt in the extracted folder."
+            ""
+            "Fifteen Puzzle:"
+            "Game.exe"
+            ""
+            "Post Machine:"
+            "Post.exe example.txt"
+            ""
+            "Post Machine with logging:"
+            "Post.exe example.txt -log"
+          ) | Set-Content -Path "release-files/README.txt" -Encoding ascii
+
+          Compress-Archive -Path "release-files/*" -DestinationPath "lab1-windows-x64.zip"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$env:GITHUB_REF_NAME"
+          "lab1-windows-x64.zip"
+          --verify-tag
+          --title "$env:GITHUB_REF_NAME"
+          --generate-notes
