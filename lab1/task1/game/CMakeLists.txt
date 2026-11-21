@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
-add_executable(Game game/main.cpp game/Header.h game/game.cpp)
+add_executable(Game game/main.cpp game/game.h game/game.cpp)
 
-add_executable(GameTests game/test.cpp game/Header.h game/game.cpp)
+add_executable(GameTests game/test.cpp game/game.h game/game.cpp)
 
 add_test(NAME RunAllTests COMMAND GameTests)
 
