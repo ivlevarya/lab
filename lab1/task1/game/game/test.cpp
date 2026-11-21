@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "Header.h"
+#include "game.h"
 #include <iostream>
 #include <sstream>
 #include <string>

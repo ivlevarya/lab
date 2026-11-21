@@ -6,7 +6,7 @@ This file contains the console menu logic for the "15-puzzle" game,
 user input handling, and gameplay management.
 */
 #include <iostream>
-#include "Header.h"
+#include "game.h"
 #include <ctime>
 
 
