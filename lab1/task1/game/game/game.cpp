@@ -3,7 +3,7 @@
 \brief File containing the implementation of all Game class methods and other functions.
 */
 
-#include "Header.h"
+#include "game.h"
 #include <cstdlib> 
 #include <iostream>
 #include <iomanip>
